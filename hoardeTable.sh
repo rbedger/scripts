@@ -1,5 +1,89 @@
 #!/usr/bin/env bash
 
+: <<'DOC'
+                                        ,   ,
+                                        $,  $,     ,
+                                        "ss.$ss. .s'
+                                ,     .ss$$$$$$$$$$s,
+                                $. s$$$$$$$$$$$$$$`$$Ss
+                                "$$$$$$$$$$$$$$$$$$o$$$       ,
+                               s$$$$$$$$$$$$$$$$$$$$$$$$s,  ,s
+                              s$$$$$$$$$"$$$$$$""""$$$$$$"$$$$$,
+                              s$$$$$$$$$$s""$$$$ssssss"$$$$$$$$"
+                             s$$$$$$$$$$'         `"""ss"$"$s""
+                             s$$$$$$$$$$,              `"""""$  .s$$s
+                             s$$$$$$$$$$$$s,...               `s$$'  `
+                         `ssss$$$$$$$$$$$$$$$$$$$$####s.     .$$"$.   , s-
+                           `""""$$$$$$$$$$$$$$$$$$$$#####$$$$$$"     $.$'
+                                 "$$$$$$$$$$$$$$$$$$$$$####s""     .$$$|
+                                   "$$$$$$$$$$$$$$$$$$$$$$$$##s    .$$" $
+                                   $$""$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"   `
+                                  $$"  "$"$$$$$$$$$$$$$$$$$$$$S""""'
+                             ,   ,"     '  $$$$$$$$$$$$$$$$####s
+                             $.          .s$$$$$$$$$$$$$$$$$####"
+                 ,           "$s.   ..ssS$$$$$$$$$$$$$$$$$$$####"
+                 $           .$$$S$$$$$$$$$$$$$$$$$$$$$$$$#####"
+                 Ss     ..sS$$$$$$$$$$$$$$$$$$$$$$$$$$$######""
+                  "$$sS$$$$$$$$$$$$$$$$$$$$$$$$$$$########"
+           ,      s$$$$$$$$$$$$$$$$$$$$$$$$#########""'
+           $    s$$$$$$$$$$$$$$$$$$$$$#######""'      s'         ,
+           $$..$$$$$$$$$$$$$$$$$$######"'       ....,$$....    ,$
+            "$$$$$$$$$$$$$$$######"' ,     .sS$$$$$$$$$$$$$$$$s$$
+              $$$$$$$$$$$$#####"     $, .s$$$$$$$$$$$$$$$$$$$$$$$$s.
+   )          $$$$$$$$$$$#####'      `$$$$$$$$$###########$$$$$$$$$$$.
+  ((          $$$$$$$$$$$#####       $$$$$$$$###"       "####$$$$$$$$$$
+  ) \         $$$$$$$$$$$$####.     $$$$$$###"             "###$$$$$$$$$   s'
+ (   )        $$$$$$$$$$$$$####.   $$$$$###"                ####$$$$$$$$s$$'
+ )  ( (       $$"$$$$$$$$$$$#####.$$$$$###'                .###$$$$$$$$$$"
+ (  )  )   _,$"   $$$$$$$$$$$$######.$$##'                .###$$$$$$$$$$
+ ) (  ( \.         "$$$$$$$$$$$$$#######,,,.          ..####$$$$$$$$$$$"
+(   )$ )  )        ,$$$$$$$$$$$$$$$$$$####################$$$$$$$$$$$"
+(   ($$  ( \     _sS"  `"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$S$$,
+ )  )$$$s ) )  .      .   `$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"'  `$$
+  (   $$$Ss/  .$,    .$,,s$$$$$$##S$$$$$$$$$$$$$$$$$$$$$$$$S""        '
+    \)_$$$$$$$$$$$$$$$$$$$$$$$##"  $$        `$$.        `$$.
+        `"S$$$$$$$$$$$$$$$$$#"      $          `$          `$
+            `"""""""""""""'         '           '           '
+DOC
+
+#######################################################################################
+# SYNOPSIS
+#
+# sometimes you come upon a useful table on the interwebz that you'd like to reference,
+#             but it's buried deep within the author's drivel
+#
+# this tool allows you to locally persist the reference data that you are interested in
+# in the form of an HTML page, which utilizes DataTables for search/sort/stripe
+#
+#######################################################################################
+# USAGE
+#
+#   * use your browser's dev tools to copy the outerHTML of the table in question
+#   * save it to a temporary file.  you may also pass it via STDIN, however you may need
+#       to tweak the HTML slightly anyway to get it to work with DataTables, so best bet
+#       is to save to a scratch file.
+#   * from a terminal:
+#       hoardeTable < input.html > output.html
+#
+#       alternatively,
+#       <some previous process> | hoardeTable > output.html
+#
+#       alternatively,
+#       hoardeTable $tableHTML > output.html
+#
+#######################################################################################
+# CAVEATS
+#
+# NO GUARANTEE is made with regard to the functioning of third party resources:
+#   * DataTables:       https://datatables.net/
+#   * Material Design:  https://m2.material.io/
+#   * jQuery:           https://code.jquery.com
+#
+# stylesheets and javascript resources are linked dynamically.  for a fully functional,
+# offline hoarde, you should download all .css and .js resources.
+#
+#######################################################################################
+
 table=$1
 
 if [ -z "$table" ]
