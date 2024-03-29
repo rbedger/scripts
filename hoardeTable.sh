@@ -129,6 +129,12 @@ echo """
     <script src=https://cdn.datatables.net/2.0.3/js/dataTables.js></script>
     <script src=https://cdn.datatables.net/2.0.3/js/dataTables.material.js></script>
     <script src=https://cdnjs.cloudflare.com/ajax/libs/material-components-web/14.0.0/material-components-web.min.js></script>
+
+    <style>
+      table tbody td {
+        cursor: copy;
+      }
+    </style>
   </head>
 
   <body>
@@ -173,12 +179,17 @@ echo """
 
         jQuery('tbody tr:first', table)
           .remove()
-          .appendTo('thead')
+          .appendTo(thead)
       }
 
-      new DataTable('table', {
+      let dt = new DataTable('table', {
         paging: false
       });
+
+      table.on('click', 'tbody td', function() {
+        navigator.clipboard.writeText(dt.cell(this).render())
+        jQuery(this).fadeTo(100, 0.3, function() { jQuery(this).fadeTo(500, 1.0); });
+      })
 
       jQuery('#dt-search-0').focus();
     </script>
