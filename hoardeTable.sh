@@ -74,6 +74,17 @@ DOC
 #######################################################################################
 # CAVEATS
 #
+# DataTables can be finnicky, which is why this script removes all HTML attributes
+# from your source prior to init'ing the table.  One important thing to note is that
+# all tables must have a <thead> in order to function with DataTables.  When you supply
+# a table which does not have a <thead> one will be created for you, the first
+# <tr> element of the <tbody> will be assumed to contain the table headers (oftentimes true),
+# and the <tr> will be removed from the <tbody> and placed into the <thead>.  Didn't turn
+# out the way you wanted it to? time to roll up ur sleeves 🪠
+#
+#######################################################################################
+# REMARKS
+#
 # NO GUARANTEE is made with regard to the functioning of third party resources:
 #   * DataTables:       https://datatables.net/
 #   * Material Design:  https://m2.material.io/
