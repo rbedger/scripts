@@ -43,5 +43,5 @@ fi
 
 if [ -n "$DEVICE_IP_IFACE" ]
 then
-    /usr/local/bin/mqttx pub -t "$1" -h "${2-broker.hivemq.com}" -p "${3-1883}" -m "{\"load\": {\"ip\":\"$IP4_ADDRESS_0\",\"if\":\"$DEVICE_IP_IFACE\"},\"ts\":\"$(date -Iseconds)\"}"
+    /usr/bin/env mqttx pub -t "$1" -h "${2-broker.hivemq.com}" -p "${3-1883}" -m "{\"load\": {\"ip\":\"$IP4_ADDRESS_0\",\"if\":\"$DEVICE_IP_IFACE\"},\"ts\":\"$(date -Iseconds)\"}"
 fi
