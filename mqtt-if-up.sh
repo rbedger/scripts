@@ -10,6 +10,8 @@ then
         - IPV4_ADDRESS_0
         - DEVICE_IP_IFACE
 
+    to call it automatically upon interface up, create a script in /etc/NetworkManager/dispatcher.d
+
     USAGE:
         mqtt-if-up.sh <topic> [<broker> <port>]
 
