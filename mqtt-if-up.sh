@@ -1,5 +1,28 @@
 #!/bin/bash
+if [ $# -lt 1 ]
+then
+    cat << EOT
+    🪄 ifconfig -> mqtt 🔮
+
+    publishes ip address, gateway, and interface information to mqtt
+
+    this script is intended to be called via NetworkManager, thus the following env is expected:
+        - IPV4_ADDRESS_0
+        - DEVICE_IP_IFACE
+
+    USAGE:
+        mqtt-if-up.sh <topic> [<broker> <port>]
+
+    PARAMETERS:
+        topic:  mqtt topic to publish to
+        broker: mqtt broker address (default broker.hivemq.com)
+        port:   mqtt broker port (default 1883)
+EOT
+
+    return
+fi
+
 if [ -n "$DEVICE_IP_IFACE" ]
 then
-    /usr/local/bin/mqttx pub -t '/rbnhmr/sausalito/ip' -h 'broker.hivemq.com' -p 1883 -m "{\"load\": {\"ip\":\"$IP4_ADDRESS_0\",\"if\":\"$DEVICE_IP_IFACE\"},\"ts\":\"$(date -Iseconds)\"}"
+    /usr/local/bin/mqttx pub -t "$1" -h "${2-broker.hivemq.com}" -p "${3-1883}" -m "{\"load\": {\"ip\":\"$IP4_ADDRESS_0\",\"if\":\"$DEVICE_IP_IFACE\"},\"ts\":\"$(date -Iseconds)\"}"
 fi
