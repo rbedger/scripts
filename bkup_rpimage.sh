@@ -6,30 +6,30 @@
 #
 # The backup is taken while the system is up, so it's a good idea to stop
 # programs and services which modifies the filesystem and needed a consistant state
-# of their file. 
+# of their file.
 # Especially applications which use databases needs to be stopped (and the database systems too).
 #
-#  So it's a smart idea to put all these stop commands in a script and perfom it before 
+#  So it's a smart idea to put all these stop commands in a script and perfom it before
 #  starting the backup. After the backup terminates normally you may restart all stopped
-#  applications or just reboot the system. 
+#  applications or just reboot the system.
 #
-# 2019-04-25 Dolorosus                  
-#        fix: Proper quoting of imagename. Now blanks in the imagename should be no longer 
+# 2019-04-25 Dolorosus
+#        fix: Proper quoting of imagename. Now blanks in the imagename should be no longer
 #             a problem.
 #
-# 2019-03-19 Dolorosus                  
+# 2019-03-19 Dolorosus
 #        fix: Define colors only if connected to a terminal.
 #             Thus output to file is no more cluttered.
 #
-# 2019-03-18 Dolorosus: 
-#               add: exclusion of files below /tmp,/proc,/run,/sys and 
+# 2019-03-18 Dolorosus:
+#               add: exclusion of files below /tmp,/proc,/run,/sys and
 #                    also the swapfile /var/swap will be excluded from backup.
 #               add: Bumping the version to 1.1
 #
-# 2019-03-17 Dolorosus: 
+# 2019-03-17 Dolorosus:
 #               add: -s parameter to create an image of a defined size.
-#               add: funtion cloneid to clone te UUID and the PTID from 
-#                    the SDCARD to the image. So restore is working on 
+#               add: funtion cloneid to clone te UUID and the PTID from
+#                    the SDCARD to the image. So restore is working on
 #                    recent raspian versions.
 #
 #
@@ -252,7 +252,7 @@ usage () {
     echo -e "        starts backup to 'rpi_backup.img', creating it if it does not exist"
     echo -e ""
     echo -e "    ${MYNAME} start -c -s 8000 /path/to/rpi_backup.img"
-    echo -e "        starts backup to 'rpi_backup.img', creating it" 
+    echo -e "        starts backup to 'rpi_backup.img', creating it"
     echo -e "        with a size of 8000mb if it does not exist"
     echo -e ""
     echo -e "    ${MYNAME} start /path/to/\$(uname -n).img"
@@ -268,13 +268,34 @@ usage () {
     echo -e "    ${MYNAME} umount /path/to/raspi-$(date +%Y-%m-%d).img"
     echo -e "        unmounts the SD Image from default mountdir (/mnt/raspi-$(date +%Y-%m-%d).img/)"
     echo -e ""
+
+    cat << EOT
+      Restoring your Raspberry Pi Backup on Linux
+
+      1. Now that you have made a backup of your Raspberry Pi you will want to at some stage make use of this. To do this, we will need to again go through the process of finding out the location of our filesystems.
+
+      Use the “df -h” command like we did in the first segment of this guide, though this time you might have more than one partition pop up for your SD Card such as “/dev/sda1” and “/dev/sda2“.
+
+      Take note of all new entries as you will need to unmount all of them.
+
+      2. Now that we have all our partition locations ready, we can unmount each of them by running the following command for each one.
+
+      Switch out “/dev/sda1” for the locations that you got in the previous step.
+
+      sudo unmount /dev/sda1
+      Copy
+
+      3. With all the partitions now unmounted let’s write our backup image to the SD Card. We can do that by running the following command. Remember swap out “/dev/sda” with your devices mount location.
+
+      sudo dd bs=4M if=~/PiSDBackup.img of=/dev/sda
+EOT
 }
 
 setup
 
 # Read the command from command line
 case ${1} in
-    start|mount|umount|gzip|cloneid|showdf) 
+    start|mount|umount|gzip|cloneid|showdf)
         opt_command=${1}
         ;;
     -h|--help)
