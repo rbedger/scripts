@@ -45,20 +45,27 @@ exec 3>&1 4>&2
 trap 'exec 2>&4 1>&3' 0 1 2 3
 exec 1>>/var/log/mqtt-if-up.log 2>&1
 
+iface="$DEVICE_IP_IFACE"
+topic="${1}/$iface"
 broker="${2-broker.hivemq.com}"
 port="${3-1883}"
 
-if [[ -n "$DEVICE_IP_IFACE" && $DEVICE_IP_IFACE != "lo" ]]
+json=$(jq -ncr \
+    --arg ip "$IP4_ADDRESS_0" \
+    --arg ts "$(date -Iseconds)" \
+    '$ARGS.named')
+
+if [[ -n "$iface" && "$iface" != "lo" ]]
 then
-    echo "ip: $IP4_ADDRESS_0"
-    echo "if: $DEVICE_IP_IFACE"
-    echo "topic: $1"
     echo "broker: $broker"
     echo "port: $port"
+    echo "topic: $topic"
+
+    echo "message: $json"
 
     /usr/bin/env mqttx pub \
         -t "$1" \
         -h "$broker" \
         -p "$port" \
-        -m "{\"load\": {\"ip\":\"$IP4_ADDRESS_0\",\"if\":\"$DEVICE_IP_IFACE\"},\"ts\":\"$(date -Iseconds)\"}"
+        -m "$json"
 fi
