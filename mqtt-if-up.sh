@@ -48,7 +48,7 @@ exec 1>>/var/log/mqtt-if-up.log 2>&1
 broker="${2-broker.hivemq.com}"
 port="${3-1883}"
 
-if [ -n "$DEVICE_IP_IFACE" ]
+if [[ -n "$DEVICE_IP_IFACE" && $DEVICE_IP_IFACE != "lo" ]]
 then
     echo "ip: $IP4_ADDRESS_0"
     echo "if: $DEVICE_IP_IFACE"
@@ -56,5 +56,9 @@ then
     echo "broker: $broker"
     echo "port: $port"
 
-    /usr/bin/env mqttx pub -t "$1" -h "$broker" -p "$port" -m "{\"load\": {\"ip\":\"$IP4_ADDRESS_0\",\"if\":\"$DEVICE_IP_IFACE\"},\"ts\":\"$(date -Iseconds)\"}"
+    /usr/bin/env mqttx pub \
+        -t "$1" \
+        -h "$broker" \
+        -p "$port" \
+        -m "{\"load\": {\"ip\":\"$IP4_ADDRESS_0\",\"if\":\"$DEVICE_IP_IFACE\"},\"ts\":\"$(date -Iseconds)\"}"
 fi
