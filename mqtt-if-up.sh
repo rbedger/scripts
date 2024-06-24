@@ -51,7 +51,7 @@ broker="${2-broker.hivemq.com}"
 port="${3-1883}"
 
 json=$(jq -ncr \
-    --arg ip "$IP4_ADDRESS_0" \
+    --arg ip "${IP4_ADDRESS_0-none}" \
     --arg ts "$(date -Iseconds)" \
     '$ARGS.named')
 
@@ -64,7 +64,7 @@ then
     echo "message: $json"
 
     /usr/bin/env mqttx pub \
-        -t "$1" \
+        -t "$topic" \
         -h "$broker" \
         -p "$port" \
         -m "$json"
