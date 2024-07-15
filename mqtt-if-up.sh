@@ -63,7 +63,7 @@ then
 
     echo "message: $json"
 
-    /usr/bin/env mqttx pub \
+    /usr/bin/env mosquitto_pub \
         -t "$topic" \
         -h "$broker" \
         -p "$port" \
