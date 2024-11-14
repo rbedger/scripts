@@ -45,10 +45,12 @@ exec 3>&1 4>&2
 trap 'exec 2>&4 1>&3' 0 1 2 3
 exec 1>>/var/log/mqtt-if-up.log 2>&1
 
-iface="$DEVICE_IP_IFACE"
+iface="${DEVICE_IP_IFACE-wlan0}"
 topic="${1}/$iface"
-broker="${2-broker.hivemq.com}"
-port="${3-1883}"
+password="$2"
+broker="${3-5258a974339943bd90b2943d0b628a66.s1.eu.hivemq.cloud}"
+port="${4-8883}"
+username="${5-robenheimer}"
 
 json=$(jq -ncr \
     --arg ip "${IP4_ADDRESS_0-none}" \
@@ -57,9 +59,15 @@ json=$(jq -ncr \
 
 if [[ -n "$iface" && "$iface" != "lo" ]]
 then
+    echo " "
+    echo "=~=~=~=~=~=~=~=~=~=~=~=~=~=~"
+    echo $(date)
+    echo "=~=~=~=~=~=~=~=~=~=~=~=~=~=~"
+    echo "iface: $iface"
     echo "broker: $broker"
     echo "port: $port"
     echo "topic: $topic"
+    echo "username: $username"
 
     echo "message: $json"
 
@@ -67,5 +75,8 @@ then
         -t "$topic" \
         -h "$broker" \
         -p "$port" \
-        -m "$json"
+        -m "$json" \
+        -u "$username" \
+        -P "$password"
+    echo "=~=~=~=~=~=~=~=~=~=~=~=~=~=~"
 fi
