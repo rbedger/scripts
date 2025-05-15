@@ -30,7 +30,7 @@ then
     to call it automatically upon interface up, create a script in /etc/NetworkManager/dispatcher.d
 
     USAGE:
-        mqtt-if-up.sh <topic> [<broker> <port>]
+        mqtt-if-up.sh <topic> <password> [<broker> <port> <username>]
 
     PARAMETERS:
         topic:  mqtt topic to publish to
@@ -38,7 +38,7 @@ then
         port:   mqtt broker port (default 1883)
 EOT
 
-    return
+    exit 1
 fi
 
 exec 3>&1 4>&2
