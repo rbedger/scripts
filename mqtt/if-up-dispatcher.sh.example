@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+export HOME="/root"
+
+/home/robert/git/user/scripts/mqtt/mqtt-if-up.sh
