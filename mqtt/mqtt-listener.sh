@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-password=$1
+export HOME=/root
 
 while read topic
 do
@@ -20,8 +20,4 @@ do
             ;;
     esac
 done < <(mosquitto_sub \
-	--host 5258a974339943bd90b2943d0b628a66.s1.eu.hivemq.cloud \
-	--username robenheimer \
-	--pw $password \
-	--port 8883 \
         -t "/rbnhmr/$(hostname)/commands")

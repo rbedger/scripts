@@ -16,7 +16,7 @@
 
 DOC
 
-if [ $# -lt 1 ]
+if [ "$1" = "-h" ]
 then
     cat << EOT
     🪄 ifconfig -> mqtt 🔮
@@ -30,12 +30,7 @@ then
     to call it automatically upon interface up, create a script in /etc/NetworkManager/dispatcher.d
 
     USAGE:
-        mqtt-if-up.sh <topic> <password> [<broker> <port> <username>]
-
-    PARAMETERS:
-        topic:  mqtt topic to publish to
-        broker: mqtt broker address (default broker.hivemq.com)
-        port:   mqtt broker port (default 1883)
+        mqtt-if-up.sh
 EOT
 
     exit 1
@@ -45,38 +40,32 @@ exec 3>&1 4>&2
 trap 'exec 2>&4 1>&3' 0 1 2 3
 exec 1>>/var/log/mqtt-if-up.log 2>&1
 
-iface="${DEVICE_IP_IFACE-wlan0}"
-topic="${1}/$iface"
-password="$2"
-broker="${3-5258a974339943bd90b2943d0b628a66.s1.eu.hivemq.cloud}"
-port="${4-8883}"
-username="${5-robenheimer}"
+iface=$DEVICE_IP_IFACE
+topic="/rbnhmr/$(hostname)/ip/$iface"
 
 json=$(jq -ncr \
     --arg ip "${IP4_ADDRESS_0-none}" \
     --arg ts "$(date -Iseconds)" \
     '$ARGS.named')
 
+echo " "
+echo "=~=~=~=~=~=~=~=~=~=~=~=~=~=~"
+echo $(date)
+echo "=~=~=~=~=~=~=~=~=~=~=~=~=~=~"
+echo "iface: $iface"
+
 if [[ -n "$iface" && "$iface" != "lo" ]]
 then
-    echo " "
-    echo "=~=~=~=~=~=~=~=~=~=~=~=~=~=~"
-    echo $(date)
-    echo "=~=~=~=~=~=~=~=~=~=~=~=~=~=~"
-    echo "iface: $iface"
-    echo "broker: $broker"
-    echo "port: $port"
     echo "topic: $topic"
-    echo "username: $username"
-
     echo "message: $json"
+
+    export HOME=/root
 
     /usr/bin/env mosquitto_pub \
         -t "$topic" \
-        -h "$broker" \
-        -p "$port" \
-        -m "$json" \
-        -u "$username" \
-        -P "$password"
-    echo "=~=~=~=~=~=~=~=~=~=~=~=~=~=~"
+        -m "$json"
+else
+    echo "iface was empty or loopback, quitting"
 fi
+
+echo "=~=~=~=~=~=~=~=~=~=~=~=~=~=~"
