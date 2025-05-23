@@ -10,7 +10,7 @@ function pibak {
         pibak <device> [<outFile>(./piBak.dd.gz)]
 EOT
     else
-        sudo dd if="$1" bs=32M | gzip -c > "${2-./piBak.dd.gz}"
+        sudo dd if="$1" bs=32M status=progress | gzip -c > "${2-./piBak.dd.gz}"
     fi;
 }
 
@@ -30,5 +30,5 @@ EOT
     destDevice="$2"
     blockSize="${3-32M}"
 
-    sudo gzip -cd "$gzipSource" | dd of="$destDevice" bs="$blockSize"
+    sudo gzip -cd "$gzipSource" | dd of="$destDevice" bs="$blockSize" status=progress
 }
