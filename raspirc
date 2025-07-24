@@ -32,3 +32,6 @@ EOT
 
     sudo gzip -cd "$gzipSource" | dd of="$destDevice" bs="$blockSize" status=progress
 }
+
+alias hawtspawt='sudo nmcli device wifi hotspot ssid robenheimer password allthebest ifname wlan0'
+alias upgrayeddd='sudo apt update && sudo apt upgrade'
