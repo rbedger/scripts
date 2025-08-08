@@ -40,10 +40,10 @@ exec 3>&1 4>&2
 trap 'exec 2>&4 1>&3' 0 1 2 3
 exec 1>>/var/log/mqtt-if-up.log 2>&1
 
-iface=${DEVICE_IP_IFACE-"$0"}
+iface=${DEVICE_IP_IFACE-"$1"}
 topic="/rbnhmr/$(hostname)/ip/$iface"
 
-ip=${IP4_ADDRESS_0-"$1"}
+ip=${IP4_ADDRESS_0-"$2"}
 if [ -z $ip ];then
   ip=$(ifconfig "$iface" | grep inet | cut -d" " -f2)
 fi
