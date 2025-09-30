@@ -14,6 +14,7 @@ function main() {
     // process.argv[0] is 'node', process.argv[1] is the script path.
     const harFilePath = process.argv[2];
     const regexString = process.argv[3];
+    const method = process.argv[4] || 'GET';
 
     try {
         // Step 1: Read the HAR file.
@@ -32,7 +33,7 @@ function main() {
         // Step 5: Iterate through the log entries to find request URLs.
         if (harJson && harJson.log && Array.isArray(harJson.log.entries)) {
             for (const entry of harJson.log.entries) {
-                if (entry && entry.request && entry.request.url) {
+                if (entry && entry.request && entry.request.url && entry.request.method === method) {
                     const url = entry.request.url;
 
                     // Step 6: Test the URL against the regex.
