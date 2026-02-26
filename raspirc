@@ -34,4 +34,4 @@ EOT
 }
 
 alias hawtspawt='sudo nmcli device wifi hotspot ssid robenheimer password allthebest ifname wlan0'
-alias upgrayeddd='sudo apt update && sudo apt upgrade'
+alias upgrayeddd='sudo apt update && sudo apt upgrade -y'
